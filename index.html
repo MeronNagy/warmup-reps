@@ -6,17 +6,16 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1"> 
 	<title>WarmupReps.com</title> 
-	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
+	<link rel="stylesheet" href="https://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.css" />
 	<link rel="apple-touch-icon" href="/images/apple-touch-icon-57x57.png" />
 	<link rel="apple-touch-icon" sizes="72x72" href="/images/apple-touch-icon-72x72.png" />
 	<link rel="apple-touch-icon" sizes="114x114" href="/images/apple-touch-icon-114x114.png" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
-	<script src="http://code.jquery.com/jquery-1.6.4.min.js"></script>
+	<script src="https://code.jquery.com/jquery-1.6.4.min.js"></script>
 	<script src="scripts/jquery.cookie.js"></script>
-	<script src="http://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
+	<script src="https://code.jquery.com/mobile/1.0.1/jquery.mobile-1.0.1.min.js"></script>
 
 	<style type="text/css">
-		/* issue 1259, pull request https://github.com/jquery/jquery-mobile/pull/2533 */
 		.ui-footer, .ui-page-fullscreen .ui-header, .ui-page-fullscreen .ui-footer {
 			box-sizing: border-box; 
 			-webkit-box-sizing: border-box; 
@@ -25,39 +24,24 @@
 	</style>
 
 	<script type="text/javascript">
-	  var _gaq = _gaq || [];
-	  _gaq.push(['_setAccount', 'UA-2960497-9']);
-	  _gaq.push(['_trackPageview']);
-
-	  (function() {
-	    var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-	    ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-	    var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	  })();
-	</script>
-
-	<script type="text/javascript">
 
 		var warmupApp = {
 			"metric" : false,
 			barWeight : function() {
 				if ($.cookie('bar_type') == 'bar-type-standard')
-					return warmupApp.metric ? 10 : 20;
+					return 10 
 				else if ($.cookie('bar_type') == 'bar-type-technique')
-					return warmupApp.metric ?  7.5 : 15;
+					return  5;
 				else if ($.cookie('bar_type') == 'bar-type-womens')
-					return warmupApp.metric ? 15 : 35;
+					return 15;
 				else
-					return warmupApp.metric ? 20 : 45;
+					return 20;
 			},
 			stepSize : function() {
-				return warmupApp.metric ? 2.5 : 5;
+				1.25
 			},
 			weights : function() {
-				if (warmupApp.metric)
-					return [20, 15, 10, 5, 2.5, 1.25];
-				else
-					return [45, 35, 25, 10, 5, 2.5];
+				return [20, 15, 10, 5, 2.5, 1.25, 0.625];
 			},
 			"programs" : []
 		}
@@ -120,7 +104,7 @@
 						$(this).attr('max', roundDown(Math.floor(currentMax * 2.20462)));
 				});
 
-				//trigger update for all lists, currently shows lbs until slider is changed
+
 				$('div').filter(function() {
 					return this.id.match(/-weight-container/);
 				}).trigger('change');
@@ -154,8 +138,7 @@
 					<hr /><p><a href="#main" data-direction="reverse" data-role="button">Choose another program</a></p></div> \
 					<div data-role="footer" class="ui-bar" data-theme="d"><h4 style="display: inline-block; margin-left: 0px; margin-right: 10px">Related:</h4> \
 					<a href="#credits" data-rel="dialog" data-transition="slidedown">Credits</a> \
-					<a href="https://github.com/nmunson/warmup-reps" data-role="button" data-inline="true">Github</a> \
-					<a href="https://github.com/nmunson/warmup-reps/issues" data-role="button" data-inline="true">Issues</a></div></div>');
+					<a href="https://github.com/MeronNagy/warmup-reps" data-role="button" data-inline="true">Github</a>');
 
 				//add exercises
 				for (j = 0; j < warmupApp.programs[i].exercises.length; j++) {
@@ -294,61 +277,60 @@
 
 			weight /= 2;
 
-			var weight_45 = 0;
-			var weight_35 = 0;
-			var weight_25 = 0;
-			var weight_10 = 0;
-			var weight_5 = 0;
-			var weight_2half = 0;
-
+			return [20, 15, 10, 5, 2.5, 1.25, 0.625];
 			while (weight > 0) {
 				if (weight >= warmupApp.weights()[0]) {
-					weight_45 += 1;
+					weight_20 += 1;
 					weight -= warmupApp.weights()[0];
 					continue;
 				}
 				else if (weight >= warmupApp.weights()[1]) {
-					weight_35 += 1;
+					weight_15 += 1;
 					weight -= warmupApp.weights()[1];
 					continue;					
 				}
 				else if (weight >= warmupApp.weights()[2]) {
-					weight_25 += 1;
+					weight_10 += 1;
 					weight -= warmupApp.weights()[2];
 					continue;					
 				}
 				else if (weight >= warmupApp.weights()[3]) {
-					weight_10 += 1;
+					weight_5 += 1;
 					weight -= warmupApp.weights()[3];
 					continue;					
 				}
 				else if (weight >= warmupApp.weights()[4]) {
-					weight_5 += 1;
+					weight_2_5 += 1;
 					weight -= warmupApp.weights()[4];
 					continue;					
 				}
-				else {
-					weight_2half += 1;
+				else if (weight >= warmupApp.weights()[5]) {
+					weight_1_25 += 1;
 					weight -= warmupApp.weights()[5];
 					continue;					
-				}				
+				} else {
+					weight_0_625 += 1;
+					weight -= warmupApp.weights()[6];
+					continue;					
+				} 		 				
 			}
 
 			var result = "";
 
-			if (weight_45 != 0) 
-				result += printWeightCountSubstring(weight_45, warmupApp.weights()[0].toString());
-			if (weight_35 != 0)
-				result += printWeightCountSubstring(weight_35, warmupApp.weights()[1].toString());
-			if (weight_25 != 0)
-				result += printWeightCountSubstring(weight_25, warmupApp.weights()[2].toString());
+			if (weight_20 != 0) 
+				result += printWeightCountSubstring(weight_20, warmupApp.weights()[0].toString());
+			if (weight_15 != 0)
+				result += printWeightCountSubstring(weight_15, warmupApp.weights()[1].toString());
 			if (weight_10 != 0)
-				result += printWeightCountSubstring(weight_10, warmupApp.weights()[3].toString());
-			if (weight_5 != 0) 
-				result += printWeightCountSubstring(weight_5, warmupApp.weights()[4].toString());
-			if (weight_2half != 0)
-				result += printWeightCountSubstring(weight_2half, warmupApp.weights()[5].toString());
-
+				result += printWeightCountSubstring(weight_10, warmupApp.weights()[2].toString());
+			if (weight_5 != 0)
+				result += printWeightCountSubstring(weight_5, warmupApp.weights()[3].toString());
+			if (weight_2_5 != 0) 
+				result += printWeightCountSubstring(weight_2_5, warmupApp.weights()[4].toString());
+			if (weight_1_25 != 0)
+				result += printWeightCountSubstring(weight_1_25, warmupApp.weights()[5].toString());
+			if (weight_0_625 != 0)
+				result += printWeightCountSubstring(weight_0_625, warmupApp.weights()[6].toString());
 			return $.trim(result);
 		}
 
@@ -368,10 +350,7 @@
 		
 		function printSet(sets, reps, weight) {
 			var output = sets + "x" + reps + " " + weight;
-			if (warmupApp.metric)
-				return output + " kgs"
-			else 
-				return output + " lbs"
+			return output + " kgs"
 		}
 
 		function roundDown(num) {
@@ -408,28 +387,20 @@
 		
 		<h3>Settings</h3>
 		<div data-role="collapsible" data-content-theme="c">
-	    <h3>Configure units and bar type</h3>
-		  	<fieldset data-role="controlgroup" data-type="horizontal" >
-		  	<legend>Unit system:</legend>
-	     	<input type="radio" name="units" id="units-pounds" value="lbs" />
-	     	<label for="units-pounds">Pounds</label>
-
-	     	<input type="radio" name="units" id="units-kilograms" value="kgs"  />
-	     	<label for="units-kilograms">Kilograms</label>
-	    </fieldset>
+	    <h3>Configure bar type</h3>
 	    <fieldset data-role="controlgroup" data-type="horizontal" >
-			<legend>Bar type (in lbs):</legend>
-	     	<input type="radio" name="bar-type" id="bar-type-olympic" value="45" />
-	     	<label for="bar-type-olympic">Olympic (45)</label>
+			<legend>Bar type:</legend>
+	     	<input type="radio" name="bar-type" id="bar-type-olympic" value="20" />
+	     	<label for="bar-type-olympic">Olympic (20 kgs)</label>
 	     	
-	     	<input type="radio" name="bar-type" id="bar-type-womens" value="35"  />
-	     	<label for="bar-type-womens">Womens (35)</label>
+	     	<input type="radio" name="bar-type" id="bar-type-womens" value="15"  />
+	     	<label for="bar-type-womens">Womens (15 kgs)</label>
 
-	     	<input type="radio" name="bar-type" id="bar-type-standard" value="20"  />
-	     	<label for="bar-type-standard">Standard (20)</label>
+	     	<input type="radio" name="bar-type" id="bar-type-standard" value="10"  />
+	     	<label for="bar-type-standard">Junior (10 kgs)</label>
 
-	     	<input type="radio" name="bar-type" id="bar-type-technique" value="15"  />
-	     	<label for="bar-type-technique">Technique (15)</label>
+	     	<input type="radio" name="bar-type" id="bar-type-technique" value="5"  />
+	     	<label for="bar-type-technique">Technique (5 kgs)</label>
 
 			</fieldset>
 		</div>
@@ -438,8 +409,7 @@
 	<div data-role="footer" class="ui-bar" data-theme="d">
 		<h4 style="display: inline-block; margin-left: 0px; margin-right: 10px">Related:</h4>
 		<a href="#credits" data-rel="dialog" data-transition="slidedown">Credits</a>
-		<a href="https://github.com/nmunson/warmup-reps" data-role="button" data-inline="true">Github</a>
-		<a href="https://github.com/nmunson/warmup-reps/issues" data-role="button" data-inline="true">Issues</a>
+		<a href="https://github.com/MeronNagy/warmup-reps" data-role="button" data-inline="true">Github</a>
 	</div>
 </div>
 
@@ -448,7 +418,7 @@
 		<h1 data>Credits</h1>
 	</div>
 	<div data-role="content">
-		<p>Written and maintained by Nicholas Munson &copy; 2012.<p>
+		<p>Originally written and maintained by Nicholas Munson &copy; 2012.<p>
 		<p>"Weight Lifting" symbol by Scott Lewis, from thenounproject.com collection.</p>
 		<a data-rel="back" data-role="button">Close</a>
 	</div>
