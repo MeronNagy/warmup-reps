@@ -2,7 +2,7 @@
   "title" : "Greyskull LP",
   "exercises" : [{
     "name" : "Squats",
-    "max" : 400,
+    "max" : 300,
     "workouts" : [{
         "sets" : "2",
         "reps" : "5",
@@ -58,7 +58,7 @@
       }]
     },{
     "name" : "Overhead",
-    "max" : 500,
+    "max" : 200,
     "workouts" : [{
         "sets" : "2",
         "reps" : "5",
@@ -86,7 +86,7 @@
       }]
     },{
     "name" : "Deadlifts",
-    "max" : 500,
+    "max" : 400,
     "workouts" : [{
         "sets" : "2",
         "reps" : "5",
