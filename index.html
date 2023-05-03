@@ -36,7 +36,10 @@
 					return 20;
 			},
 			stepSize : function() {
-				1.25
+				return 1.25
+			},
+			warmUpStepSize : function() {
+				return 2.5
 			},
 			weights : function() {
 				return [20, 15, 10, 5, 2.5, 1.25, 0.625];
@@ -115,7 +118,7 @@
 						<div data-role="content"><h2>' + warmupApp.programs[i].exercises[j].name + '</h2> \
 						<p>Choose your working weight.  Your warmup sets will then be calculated as well as the weights you need to put on each bar side.</p>	\
 				   		<div id="' + shortTitle + "-" + shortExerciseName + '-weight-container"><label for="' + shortTitle + "-" + shortExerciseName + '-weight">Weight:</label> \
-				   		<input type="range" name="' + shortTitle + "-" + shortExerciseName + '-weight" id="' + shortTitle + "-" + shortExerciseName + '-weight" value="' + currentWeight + '" min="20" max="' + warmupApp.programs[i].exercises[j].max + '" step="1.25" />	\
+				   		<input style="min-width: 70px" type="range" name="' + shortTitle + "-" + shortExerciseName + '-weight" id="' + shortTitle + "-" + shortExerciseName + '-weight" value="' + currentWeight + '" min="20" max="' + warmupApp.programs[i].exercises[j].max + '" step="1.25" />	\
 						</div><ul data-role="listview" data-inset="true" id="' + shortTitle + "-" + shortExerciseName + '-warmup"></ul> \
 						<p><a href="#' + shortTitle + '" data-direction="reverse" data-role="button">Choose another exercise</a></p>	\
 						</div><div data-role="footer" class="ui-bar" data-theme="d"><h4 style="display: inline-block; margin-left: 0px; margin-right: 10px">Related:</h4> \
@@ -144,7 +147,7 @@
 
 						$('#' + shortTitle + "-" + shortExerciseName + '-warmup').append('<li>' + 
 							printSet(workout.sets, workout.reps, setWeight) + 
-							' (' + calculateBarbellWeights(setWeight) + ')</li>');
+							' ( ' + calculateBarbellWeights(setWeight) + ')</li>');
 					}
 				}							
 			}
@@ -206,12 +209,11 @@
 			list.empty();
 
 			for (i = 0; i < workouts.length; i++) {
-				var workout = workouts[i];
-				var setWeight = findWeight(workout, weight);
-
+				const workout = workouts[i];
+				const setWeight = findWeight(workout, weight);
 				list.append('<li>' + 
 					printSet(workout.sets, workout.reps, setWeight) + 
-					' (' + calculateBarbellWeights(setWeight) + ')</li>');
+					' ( ' + calculateBarbellWeights(setWeight) + ')</li>');
 			}
 			
 			try
@@ -229,11 +231,18 @@
 			weight -= warmupApp.barWeight();
 
 			if (weight === 0)
-				return "Bar";
+				return "Bar ";
 
 			weight /= 2;
 
-			return [20, 15, 10, 5, 2.5, 1.25, 0.625];
+			let weight_20 = 0;
+			let weight_15 = 0;
+			let weight_10 = 0;
+			let weight_5 = 0;
+			let weight_2_5 = 0;
+			let weight_1_25 = 0;
+			let weight_0_625 = 0;
+
 			while (weight > 0) {
 				if (weight >= warmupApp.weights()[0]) {
 					weight_20 += 1;
@@ -272,22 +281,21 @@
 			}
 
 			var result = "";
-
 			if (weight_20 != 0) 
-				result += printWeightCountSubstring(weight_20, warmupApp.weights()[0].toString());
+				result += '<span style="color:blue">' + printWeightCountSubstring(weight_20, warmupApp.weights()[0].toString()) + '</span>';
 			if (weight_15 != 0)
-				result += printWeightCountSubstring(weight_15, warmupApp.weights()[1].toString());
+				result +='<span style="color:yellow;text-shadow:-1px -1px 0 #000,1px -1px 0 #000,-1px 1px 0 #000,1px 1px 0 #000;">' + printWeightCountSubstring(weight_15, warmupApp.weights()[1].toString()) + '</span>';
 			if (weight_10 != 0)
-				result += printWeightCountSubstring(weight_10, warmupApp.weights()[2].toString());
+				result += '<span style="color:green">' + printWeightCountSubstring(weight_10, warmupApp.weights()[2].toString()) + '</span>';
 			if (weight_5 != 0)
-				result += printWeightCountSubstring(weight_5, warmupApp.weights()[3].toString());
+				result +=  '<span style="color:gray">' + printWeightCountSubstring(weight_5, warmupApp.weights()[3].toString()) + '</span>';
 			if (weight_2_5 != 0) 
 				result += printWeightCountSubstring(weight_2_5, warmupApp.weights()[4].toString());
 			if (weight_1_25 != 0)
 				result += printWeightCountSubstring(weight_1_25, warmupApp.weights()[5].toString());
 			if (weight_0_625 != 0)
 				result += printWeightCountSubstring(weight_0_625, warmupApp.weights()[6].toString());
-			return $.trim(result);
+			return result;
 		}
 
 		function printWeightCountSubstring(weight, text) {
@@ -298,22 +306,25 @@
 		}
 
 		function findWeight(exercise, weight) {
-			if (exercise.multiplier != undefined)
+			if (exercise.multiplier != undefined) {
 				return roundDown(exercise.multiplier * weight);
-			else
+			} else {
 				return exercise.weight;
+			}
+		
 		}
 		
 		function printSet(sets, reps, weight) {
 			var output = sets + "x" + reps + " " + weight;
-			return output + " kgs"
+			return output + " kg"
 		}
 
 		function roundDown(num) {
-			if (num - (num % warmupApp.stepSize()) < warmupApp.barWeight())
+			if (num - (num % warmupApp.warmUpStepSize()) < warmupApp.barWeight()) {
 				return warmupApp.barWeight();
-			else
-				return num - (num % warmupApp.stepSize());
+			} else {
+				return num - (num % warmupApp.warmUpStepSize());
+			}
 		}		
 
 	</script>
@@ -347,16 +358,16 @@
 	    <fieldset data-role="controlgroup" data-type="horizontal" >
 			<legend>Bar type:</legend>
 	     	<input type="radio" name="bar-type" id="bar-type-olympic" value="20" />
-	     	<label for="bar-type-olympic">Olympic (20 kgs)</label>
+	     	<label for="bar-type-olympic">Olympic (20 kg)</label>
 	     	
 	     	<input type="radio" name="bar-type" id="bar-type-womens" value="15"  />
-	     	<label for="bar-type-womens">Womens (15 kgs)</label>
+	     	<label for="bar-type-womens">Womens (15 kg)</label>
 
 	     	<input type="radio" name="bar-type" id="bar-type-standard" value="10"  />
-	     	<label for="bar-type-standard">Junior (10 kgs)</label>
+	     	<label for="bar-type-standard">Junior (10 kg)</label>
 
 	     	<input type="radio" name="bar-type" id="bar-type-technique" value="5"  />
-	     	<label for="bar-type-technique">Technique (5 kgs)</label>
+	     	<label for="bar-type-technique">Technique (5 kg)</label>
 
 			</fieldset>
 		</div>
