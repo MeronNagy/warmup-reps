@@ -30,10 +30,10 @@
 					return 10 
 				else if ($.cookie('bar_type') == 'bar-type-technique')
 					return 5;
-				else if ($.cookie('bar_type') == 'bar-type-womens')
-					return 15;
-				else
+				else if ($.cookie('bar_type') == 'bar-type-olympic')
 					return 20;
+				else
+					return 15;
 			},
 			stepSize : function() {
 				return 1.25
@@ -172,24 +172,6 @@
 			else {
 				try {
 					$('input[id="bar-type-womens"]').prop("checked", true).checkboxradio("refresh");
-				}
-				catch (err) {
-					console.log(err);
-				}
-			}
-			if ($.cookie('units') != undefined) {
-				$('input[name="units"]').prop("checked", false);
-				try {
-					$('input[id="' + $.cookie('units') + '"]').prop("checked", true).checkboxradio("refresh");	
-				}
-				catch (err) {
-					console.log(err);
-				}
-				$('input').attr('step', warmupApp.stepSize().toString());
-			}
-			else {
-				try {
-					$('input[id="units-pounds"]').prop("checked", true).checkboxradio("refresh");
 				}
 				catch (err) {
 					console.log(err);
