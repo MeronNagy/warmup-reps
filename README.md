@@ -1,11 +1,10 @@
 # WarmupReps
 
-This application is a warmup sets and reps calculator for various
-strength training programs.  You choose your working weight for each 
+This application is a fork from https://github.com/nmunson/warmup-reps which is a warmup sets and reps calculator for various
+strength training programs adjust for personal use.  You choose your working weight for each 
 exercise in the program and the warmup sets and reps are automatically
 calculated, along with the weights you need to place on the bar.  As 
-you use it, it remembers preferences such as bar size, unit system, 
-and the weights for each exercise when you come back for the next 
+you use it, it remembers preferences such as bar size and the weights for each exercise when you come back for the next 
 workout.  
 
 ## Programs
