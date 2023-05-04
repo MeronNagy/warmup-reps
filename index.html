@@ -143,7 +143,7 @@
 					//add each set
 					for (k = 0; k < warmupApp.programs[i].exercises[j].workouts.length; k++) {
 						var workout = warmupApp.programs[i].exercises[j].workouts[k];
-						var setWeight = findWeight(workout, $('#' + shortTitle + '-' + shortExerciseName + '-weight').val());
+						var setWeight = findWeight(workout, $('#' + shortTitle + '-' + shortExerciseName + '-weight').val(), warmupApp.programs[i].exercises[j].workouts.length !== k+1);
 
 						$('#' + shortTitle + "-" + shortExerciseName + '-warmup').append('<li>' + 
 							printSet(workout.sets, workout.reps, setWeight) + 
@@ -192,7 +192,9 @@
 
 			for (i = 0; i < workouts.length; i++) {
 				const workout = workouts[i];
-				const setWeight = findWeight(workout, weight);
+				const isWarmUp = workouts.length !== i+1;
+				console.log(isWarmUp);
+				const setWeight = findWeight(workout, weight, isWarmUp);
 				list.append('<li>' + 
 					printSet(workout.sets, workout.reps, setWeight) + 
 					' ( ' + calculateBarbellWeights(setWeight) + ')</li>');
@@ -287,9 +289,9 @@
 				return text + " ";
 		}
 
-		function findWeight(exercise, weight) {
+		function findWeight(exercise, weight, isWarmUp) {
 			if (exercise.multiplier != undefined) {
-				return roundDown(exercise.multiplier * weight);
+				return roundDown(exercise.multiplier * weight, isWarmUp);
 			} else {
 				return exercise.weight;
 			}
@@ -301,11 +303,15 @@
 			return output + " kg"
 		}
 
-		function roundDown(num) {
-			if (num - (num % warmupApp.warmUpStepSize()) < warmupApp.barWeight()) {
+		function roundDown(num, isWarmUp) {
+			let divisor = warmupApp.stepSize()
+			if (isWarmUp) {
+				divisor = warmupApp.warmUpStepSize();
+			}
+			if (num - (num % divisor) < warmupApp.barWeight()) {
 				return warmupApp.barWeight();
 			} else {
-				return num - (num % warmupApp.warmUpStepSize());
+				return num - (num % divisor);
 			}
 		}		
 
